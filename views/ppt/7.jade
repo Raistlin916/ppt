@@ -1,0 +1,57 @@
+extend ../code
+
+block title
+  h3 How Backbone code
+
+block code
+  template(id='code').
+    var LightModel = Backbone.Model.extend({
+      defaults: {
+        color: 'red'
+      }
+    });
+
+    var LightCollection = Backbone.Collection.extend({
+      model: LightModel
+    });
+
+    var tpl = '<div style="background: <%= color %>;border-radius:50%;height:50px;width:50px">my color is <%= color %></div>';
+
+    var LightView = Backbone.View.extend({
+      template: _.template(tpl),
+      render: function() {
+        var data = this.model.toJSON();
+        this.$el.html(this.template(data));
+        return this.$el;
+      }
+    });
+
+    var LightListView = Backbone.View.extend({
+      render: function () {
+        var self = this;
+        this.$el.empty();
+        this.collection.each(function(item){
+          var light = new LightView({
+            model: item
+          });
+          self.$el.append(light.render());
+        });
+      }
+    });
+
+    var data = [{color: 'red'}, {color: 'yellow'}, {color: 'green'}, {}];
+
+    var lightList = new LightListView({
+      el: $('.container'),
+      collection: new LightCollection(data)
+    });
+
+    lightList.render();
+
+
+block display
+  template(id="display_placeholder")
+    .container container
+
+block script
+  script(src="/javascripts/backbone.js")

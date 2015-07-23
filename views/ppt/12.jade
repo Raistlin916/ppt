@@ -1,0 +1,43 @@
+extend ../code
+
+block title
+  h3 How Angular code with Web Components
+
+block code
+  template(id='code').
+    var app = angular.module('lightApp', []);
+
+    app.controller('LightCtrl', function ($scope) {
+      $scope.lights = ['red', 'yellow', 'green'];
+
+      $scope.add = function () {
+        $scope.lights.push('blue');
+      };
+    }).directive('light', function () {
+      return {
+        // A for atrrbute, C for Class, E for Element
+        restrict: 'E',
+        scope: {
+          color: '@'
+        },
+        template: '<div ng-click="lightUp()" style="background: {{bg}}">my color is {{color}}, click me</div>',
+        link: function (scope, elem) {
+          scope.lightUp = function () {
+            scope.bg = scope.color;
+          } 
+        }
+      };
+    });
+
+    // <div ng-app="lightApp"> ... </div>
+    angular.bootstrap($('#ng-container')[0], ['lightApp']);
+
+block display
+  template(id="display_placeholder")
+    div(id="ng-container")
+      div(ng-controller="LightCtrl")
+        light(color="red")
+        light(color="green")
+        light(color="yellow")
+block script
+  script(src="/javascripts/angular.js")

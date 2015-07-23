@@ -1,0 +1,50 @@
+extend ../code
+
+block title
+  h3 异步处理
+
+block code
+  template(id='code').
+    // callback hell
+    
+    setTimeout(function () {
+      $('light').eq(0).trigger('light_on');
+      setTimeout(function () {
+        $('light').trigger('light_off');
+        $('light').eq(1).trigger('light_on');
+        setTimeout(function () {
+          $('light').trigger('light_off');
+          $('light').eq(2).trigger('light_on');
+        }, 1000);
+      }, 1000);
+    }, 1000);
+
+    // 再逐个关闭？
+    
+    /*
+    这不是严肃的写法
+    setTimeout(function () {
+      $('light').eq(0).trigger('light_on');
+    }, 1000);
+
+    setTimeout(function () {
+      $('light').trigger('light_off');
+      $('light').eq(1).trigger('light_on');  
+    }, 2000);
+
+    setTimeout(function () {
+      $('light').trigger('light_off');
+      $('light').eq(2).trigger('light_on');
+    }, 3000);
+    */
+  
+block display
+  template(id="display_placeholder")
+    div(id="ng-container")
+      div(ng-controller="LightCtrl")
+        light(color="red")
+        light(color="yellow")
+        light(color="green")
+block script
+  script(src="/javascripts/angular.js")
+  script(src="/javascripts/light_webcompoents.js")

@@ -1,0 +1,31 @@
+extend ../code
+
+block title
+  h3 How Angular code
+
+block code
+  template(id='code').
+    var app = angular.module('lightApp', []);
+
+    app.controller('LightCtrl', function ($scope) {
+      $scope.lights = ['red', 'yellow', 'green'];
+
+      $scope.add = function () {
+        $scope.lights.push('blue');
+      };
+    });
+    
+
+    // <div ng-app="lightApp"> ... </div>
+    angular.bootstrap($('#ng-container')[0], ['lightApp']);
+
+block display
+  template(id="display_placeholder")
+    div(id="ng-container")
+      div(ng-controller="LightCtrl")
+        button(ng-click="add()") add
+        .container container
+          div(ng-repeat="light in lights track by $index", style="background: {{light}}") {{light}}
+
+block script
+  script(src="/javascripts/angular.js")

@@ -1,0 +1,36 @@
+extend ../code
+
+block title
+  h3 异步处理
+
+block code
+  template(id='code').
+    function lightOn(n) {
+      return function () {
+        return new Promise(function(resolve, reject){
+          setTimeout(function(){
+            $('light').trigger('light_off');
+            $('light').eq(n).trigger('light_on');
+            resolve();
+          }, 1000);
+        });
+      };
+    }
+
+    lightOn(0)()
+      .then(lightOn(1))
+      .then(lightOn(2))
+      .then(lightOn(1))
+      .then(lightOn(0));
+        
+  
+block display
+  template(id="display_placeholder")
+    div(id="ng-container")
+      div(ng-controller="LightCtrl")
+        light(color="red")
+        light(color="yellow")
+        light(color="green")
+block script
+  script(src="/javascripts/angular.js")
+  script(src="/javascripts/light_webcompoents.js")

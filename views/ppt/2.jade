@@ -1,0 +1,16 @@
+extend ../code
+
+block title
+  h3 How jquery code
+
+block code
+  template(id='code').
+    $('.div1').html('red light');
+    $('.div2').html('yellow light');
+    $('.div3').html('green light');
+
+block display
+  template(id="display_placeholder")
+    .div1 div1
+    .div2 div2
+    .div3 div3

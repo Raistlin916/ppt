@@ -1,0 +1,42 @@
+extend ../code
+
+block title
+  h3 异步处理 co
+
+block code
+  template(id='code').
+    function lightOn(n) {
+      return new Promise(function(resolve, reject){
+        setTimeout(function(){
+          $('light').trigger('light_off');
+          $('light').eq(n).trigger('light_on');
+          resolve();
+        }, 1000);
+      });
+    }
+
+    co(function* () {
+      yield lightOn(0);
+      yield lightOn(1);
+      yield lightOn(2);
+      yield lightOn(1);
+      yield lightOn(0);
+    });
+  
+block display
+  template(id="display_placeholder")
+    div(id="ng-container")
+      div(ng-controller="LightCtrl")
+        light(color="red")
+        light(color="yellow")
+        light(color="green")
+block script
+  script(src="/javascripts/angular.js")
+  script(src="/javascripts/light_webcompoents.js")
+  script(src="/javascripts/browser.js")
+  script(src="/javascripts/co.js", type="text/babel")
+  script.
+    window.handleCode = function (code) {
+      return babel.transform(code).map;
+    }
+    

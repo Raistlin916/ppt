@@ -1,0 +1,54 @@
+extend ../code
+
+block title
+  h3 How jquery code (oop)
+
+block code
+  template(id='code').
+    function Light (el, color) {
+      this.el = el;
+      this.color = color;
+    }
+    Light.prototype = {
+      render: function () {
+        this.el.css({
+          background: this.color
+        })
+      }
+    };
+
+    function CircleLight () {
+      Light.apply(this, arguments);
+    }
+    CircleLight.prototype = Object.create(Light.prototype);
+    $.extend(CircleLight.prototype, {
+      render: function () {
+        Light.prototype.render.apply(this, arguments);
+        this.el.css({
+          width: 50,
+          height: 50,
+          borderRadius: '50%'
+        });
+      }
+    });
+    
+    var ins = [];
+    $('.div1,.div2,.div3').each(function () {
+      var elem = $(this);
+      var klass = Light;
+      if (elem.hasClass('circle')) {
+        klass = CircleLight;
+      }
+
+      ins.push( new klass(elem, elem.data('color')) );
+    });
+
+    ins.forEach(function (item) {
+      item.render();
+    });
+
+block display
+  template(id="display_placeholder")
+    .div1(data-color="red") div1
+    .div2.circle(data-color="yellow") div2
+    .div3(data-color="green") div3

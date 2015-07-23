@@ -1,0 +1,34 @@
+extend ../code
+
+block title
+  h3 How jquery code (oop)
+
+block code
+  template(id='code').
+    function Light (el, color) {
+      this.el = el;
+      this.color = color;
+    }
+    Light.prototype = {
+      render: function () {
+        this.el.css({
+          background: this.color
+        })
+      }
+    };
+
+    var redLight = new Light($('.div1'), 'red');
+    var yellowLight = new Light($('.div2'), 'yellow');
+    var greenLight = new Light($('.div3'), 'green');
+
+    var ins = [redLight, yellowLight, greenLight];
+
+    ins.forEach(function (item) {
+      item.render();
+    });
+
+block display
+  template(id="display_placeholder")
+    .div1 div1
+    .div2 div2
+    .div3 div3

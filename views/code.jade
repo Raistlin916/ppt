@@ -1,0 +1,84 @@
+extend layout
+
+block head
+  link(rel="stylesheet", href="/stylesheets/codemirror.css")
+  script(src="/javascripts/codemirror.js")
+  script(src="/javascripts/js.js")
+
+block content
+  style.
+    body {
+      padding: 10px;
+    }
+    .code-field {
+      font-size: 14px;
+      display: inline-block;
+      border-right: 1px solid #e5e5e5;
+      min-height: 500px;
+      width: 50%;
+      outline:none;
+      box-sizing: border-box;
+      padding: 20px;
+      vertical-align: top;
+    }
+    .display {
+      font-size: 14px;
+      display: inline-block;
+      width: 40%;
+      margin-left: 50px;
+      vertical-align: top;
+      padding: 20px;
+    }
+
+    .wrap {
+      font-size: 0;
+    }
+
+    .CodeMirror {
+      height: 500px;
+    }
+  script.
+    $(function (){
+      var codeField = $('.code-field');
+      var display = $('.display');
+      $('.js-run-btn').click(function(){
+        var code = editor.getValue();
+        
+        code = handleCode(code);
+
+        with({
+          document: {
+            body: display
+          }
+        }){
+          eval(code);
+        }
+      }).on('keyup', function (e){
+        e.preventDefault();
+      });
+  
+      var code = $('#code').html().replace('&lt;', "<").replace('&gt;', ">");
+
+      var placeholder = $('#display_placeholder').html();
+      display.html(placeholder);
+
+      var editor = new CodeMirror(document.querySelector('.code-field'), {
+        lineWrapping: true
+      });
+
+      editor.setValue(code);
+      
+      window.handleCode = function(code){return code};
+    });
+
+    
+
+  block title
+  button.js-run-btn run
+  .wrap
+    .code-field(contenteditable)
+    .display
+  
+  block code
+  block display
+  block script
